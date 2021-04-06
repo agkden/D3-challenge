@@ -93,6 +93,18 @@ d3.csv("assets/data/data.csv").then((csvData) => {
             .text("In Poverty (%)");
   
   
+  // *** Append circles ***
+  chartGroup.selectAll("circle")
+            .data(csvData)
+            .enter()
+            .append("circle")
+            .classed("stateCircle", true)
+            .attr("r", 10)
+            .attr("cx", d => xScale(d.poverty))
+            .attr("cy", d => yScale(d.healthcare));
+
+  
+  
 
 
 
