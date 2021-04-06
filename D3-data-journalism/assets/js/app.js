@@ -33,6 +33,21 @@ var chartGroup = svg.append("g")
 //  2.  Read the data
 //===============================
 
+// load data from csv file by using d3.csv() function
+d3.csv("assets/data/data.csv").then((csvData) => {
+  console.log(csvData);
+
+  // convert string values to number format
+  csvData.forEach(d => {
+    d.poverty = +d.poverty;
+    d.healthcare = +d.healthcare;
+    console.log(d);
+  });
+
+
+  //===============================
+  //  3.  Create the Scatter Plot
+  //===============================
 
 
 
@@ -40,10 +55,5 @@ var chartGroup = svg.append("g")
 
 
 
-//===============================
-//  3.  Create the Scatter Plot
-//===============================
 
-
-
-
+}); // close d3
