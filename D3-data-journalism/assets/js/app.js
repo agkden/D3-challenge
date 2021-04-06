@@ -49,6 +49,50 @@ d3.csv("assets/data/data.csv").then((csvData) => {
   //  3.  Create the Scatter Plot
   //===============================
 
+  // *** Define Scale ***
+  var xScale = d3.scaleLinear()
+    .domain([8, 24])
+    .range([0, chartWight]);
+
+  var yScale = d3.scaleLinear()
+    .domain([4, 26])
+    .range([chartHeight, 0]);
+
+  
+  // *** Create Axes ***
+  var xAxis = d3.axisBottom(xScale); // the ticks oriented on the bottom
+  var yAxis = d3.axisLeft(yScale); // the ticks oriented on the left
+
+  // append Y axis to the chart area
+  chartGroup.append("g")
+            .attr("class", "axis")
+            .call(yAxis);
+
+  // create Y axis title  
+  chartGroup.append("text")
+            .classed("aText", true)
+            .attr("transform", "rotate(-90)")
+            .attr("x", -(chartHeight-chartMargin.top) /2)
+            .attr("y", -chartMargin.left /1.5)
+            .attr("axis-name", "healthcare")
+            .text("Lacks Healthcare (%)");
+  
+
+  // set X axis to the bottom of the chart
+  chartGroup.append("g")
+            .attr("class", "axis")
+            .attr("transform", `translate(0, ${chartHeight})`)
+            .call(xAxis);  
+
+  // create X axis title 
+  chartGroup.append("text")
+            .classed("aText", true)
+            .attr("x", chartWight /2)
+            .attr("y", chartMargin.top+chartHeight+10)
+            .attr("axis-name", "poverty")
+            .text("In Poverty (%)");
+  
+  
 
 
 
