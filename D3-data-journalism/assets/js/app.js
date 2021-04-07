@@ -104,12 +104,19 @@ d3.csv("assets/data/data.csv").then((csvData) => {
             .attr("cy", d => yScale(d.healthcare));
 
   
-  
+  //=================================================
+  //  4.  Include state abbreviations in the circles
+  //=================================================
 
-
-
-
-
-
+  chartGroup.selectAll(".stateText")
+            .data(csvData)
+            .enter()
+            .append("text")
+            .classed("stateText", true)            
+            .attr("x", d => xScale(d.poverty))
+            .attr("y", d => yScale(d.healthcare))
+            .text(d => (d.abbr))
+            .attr("dy", "0.25rem")
+            .attr("font-size", "10px");
 
 }); // close d3
