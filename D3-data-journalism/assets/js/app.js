@@ -15,7 +15,7 @@ var chartMargin = {
 };
 
 // define the chart's dimensions
-var chartWight = svgWidth - chartMargin.left - chartMargin.right;
+var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
 var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
 
 // create svg container
@@ -41,7 +41,7 @@ d3.csv("assets/data/data.csv").then((csvData) => {
   csvData.forEach(d => {
     d.poverty = +d.poverty;
     d.healthcare = +d.healthcare;
-    console.log(d);
+    //console.log(d);
   });
 
 
@@ -52,7 +52,7 @@ d3.csv("assets/data/data.csv").then((csvData) => {
   // *** Define Scale ***
   var xScale = d3.scaleLinear()
     .domain([8, 24])
-    .range([0, chartWight]);
+    .range([0, chartWidth]);
 
   var yScale = d3.scaleLinear()
     .domain([4, 26])
@@ -87,14 +87,14 @@ d3.csv("assets/data/data.csv").then((csvData) => {
   // create X axis title 
   chartGroup.append("text")
             .classed("aText", true)
-            .attr("x", chartWight /2)
+            .attr("x", chartWidth /2)
             .attr("y", chartMargin.top+chartHeight+10)
             .attr("axis-name", "poverty")
             .text("In Poverty (%)");
   
   
   // *** Append circles ***
-  chartGroup.selectAll("circle")
+  var circlesGroup = chartGroup.selectAll("circle")
             .data(csvData)
             .enter()
             .append("circle")
@@ -118,5 +118,24 @@ d3.csv("assets/data/data.csv").then((csvData) => {
             .text(d => (d.abbr))
             .attr("dy", "0.25rem")
             .attr("font-size", "10px");
+
+  
+  //===============================
+  //  5.  Add ToolTip
+  //===============================
+
+  var toolTip = d3.tip()
+    .attr("class", "d3-tip")
+    .offset([-8, 0])
+    .style("display", "block")
+    .html(function(d) { return (`${d.state}<br>Poverty: ${d.poverty}%<br>Healthcare: ${d.healthcare}%`); });
+
+  circlesGroup.call(toolTip)
+              .on("mouseover", toolTip.show)
+              .on("mouseout", toolTip.hide);
+
+  
+
+
 
 }); // close d3
