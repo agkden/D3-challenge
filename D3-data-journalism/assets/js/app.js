@@ -119,6 +119,57 @@ function renderStateText(stateText, newXScale, chosenXAxis, newYScale, chosenYAx
   return stateText;
 }
 
+//------------------------------------
+// *** Function to Update ToolTip ***
+//------------------------------------
+
+// function used for updating circles group with new tooltip
+function updateToolTip(chosenXAxis, circlesGroup, chosenYAxis) {
+
+  var labelX;
+  var labelY;
+  var labelm;
+
+  if (chosenXAxis === "poverty") {
+  labelX = "Poverty: ";
+  labelm = "%";
+  }
+  else if (chosenXAxis === "age") {
+  labelX = "Age: ";
+  labelm = "" ;
+  }
+  else {
+  labelX = "Household Income: $";
+  labelm = "";
+  }
+
+  if (chosenYAxis === "obesity") {
+    labelY = "Obesity: "  
+  }
+  else if (chosenYAxis === "smokes") {
+  labelY = "Smokes: "
+  }
+  else {
+    labelY = "Healthcare: ";
+  }
+
+  var toolTip = d3.tip()    
+  .attr("class", "d3-tip")
+  .offset([-8, 0])
+  .style("display", "block")
+  .html(function(d) {
+
+    return (`${d.state}<br>${labelX}${d[chosenXAxis]}${labelm}<br>${labelY} ${d[chosenYAxis]}%`);
+    
+  });
+
+  circlesGroup.call(toolTip)
+          .on('mouseover', toolTip.show)
+          .on('mouseout', toolTip.hide);
+
+  return circlesGroup;
+}
+
 
 //===============================
 //  2.  Read the data
@@ -277,18 +328,10 @@ d3.csv("assets/data/data.csv").then((csvData) => {
 
   
   //===============================
-  //  5.  Add ToolTip
+  //  5.  Update ToolTip
   //===============================
 
-  // var toolTip = d3.tip()
-  //   .attr("class", "d3-tip")
-  //   .offset([-8, 0])
-  //   .style("display", "block")
-  //   .html(function(d) { return (`${d.state}<br>Poverty: ${d.poverty}%<br>Healthcare: ${d.healthcare}%`); });
-
-  // circlesGroup.call(toolTip)
-  //             .on("mouseover", toolTip.show)
-  //             .on("mouseout", toolTip.hide);
+  var circlesGroup = updateToolTip(chosenXAxis, circlesGroup, chosenYAxis);
 
 
   //===================================
@@ -316,6 +359,9 @@ d3.csv("assets/data/data.csv").then((csvData) => {
         
         // update state abbreviation text with new x and y values
         stateText = renderStateText(stateText, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+
+        // updates tooltips with new info        
+        circlesGroup = updateToolTip(chosenXAxis, circlesGroup, chosenYAxis);
 
         // changes classes to change bold text - X-axis
         if (chosenXAxis === "age") {            
@@ -375,6 +421,9 @@ d3.csv("assets/data/data.csv").then((csvData) => {
       
       // update state abbreviation text with new x and y values
       stateText = renderStateText(stateText, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+
+      // updates tooltips with new info        
+      circlesGroup = updateToolTip(chosenXAxis, circlesGroup, chosenYAxis);
       
       // changes classes to change bold text - Y-axis
       if (chosenYAxis === "smokes") {          
