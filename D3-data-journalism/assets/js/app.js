@@ -283,6 +283,69 @@ d3.csv("assets/data/data.csv").then((csvData) => {
   //             .on("mouseover", toolTip.show)
   //             .on("mouseout", toolTip.hide);
 
+
+  //===================================
+  //  Create Axes Labels event Listener
+  //===================================  
+   
+  // X-axis event listener
+  xLabelGroup.selectAll("text")
+    .on("click", function() {
+      // get value of selection
+      var value = d3.select(this).attr("value");
+      if (value !== chosenXAxis) {
+
+        // replaces chosenXAxis with value
+        chosenXAxis = value;
+
+        console.log(chosenXAxis)
+         
+        // updates x scale for new data
+        xLinearScale = xScale(csvData, chosenXAxis);
+
+        // updates x axis with transition
+        xAxis = renderXAxes(xLinearScale, xAxis);
+
+        // updates circles with new x values
+        circlesGroup = renderXCircles(circlesGroup, xLinearScale, chosenXAxis);                
+
+        // changes classes to change bold text - X-axis
+        if (chosenXAxis === "age") {            
+          ageTitle
+            .classed("active", true) 
+            .classed("inactive", false);
+          povertyTitle
+            .classed("active", false)
+            .classed("inactive", true);
+          incomeTitle
+            .classed("active", false)
+            .classed("inactive", true);
+        }
+        else if (chosenXAxis === "income") {           
+          incomeTitle
+            .classed("active", true)
+            .classed("inactive", false);
+          povertyTitle
+            .classed("active", false)
+            .classed("inactive", true);
+          ageTitle
+            .classed("active", false)
+            .classed("inactive", true);
+        }
+        else {           
+          povertyTitle
+            .classed("active", true)
+            .classed("inactive", false);
+          ageTitle
+            .classed("active", false)
+            .classed("inactive", true);
+          incomeTitle
+            .classed("active", false)
+            .classed("inactive", true);          
+        }
+      }
+    }); // close .on()
+
   
 
 
