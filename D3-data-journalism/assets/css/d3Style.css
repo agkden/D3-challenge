@@ -74,6 +74,10 @@
   left: 0;
 }
 
+circle:hover {
+  stroke: black;
+}
+
 /* Mobile Rules */
 @media screen and (max-width: 530px) {
   .stateText {
