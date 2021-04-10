@@ -46,9 +46,7 @@ function xScale(csvData, chosenXAxis) {
   // create scales
   var xLinearScale = d3.scaleLinear()
       .domain([d3.min(csvData, d => d[chosenXAxis]) * 0.9, d3.max(csvData, d => d[chosenXAxis]) * 1.1])
-      .range([0, chartWidth]);
-
-  console.log(d3.min(csvData, d => d[chosenXAxis]));
+      .range([0, chartWidth]);  
 
   return xLinearScale;
 }
@@ -177,7 +175,7 @@ function updateToolTip(chosenXAxis, circlesGroup, chosenYAxis) {
 
 // load data from csv file by using d3.csv() function
 d3.csv("assets/data/data.csv").then((csvData) => {
-  console.log(csvData);
+  //console.log(csvData);
 
   // convert string values to number format
   csvData.forEach(d => {
@@ -187,33 +185,20 @@ d3.csv("assets/data/data.csv").then((csvData) => {
     d.income = +d.income;
     d.obesity = +d.obesity;
     d.smokes = +d.smokes;
-    //console.log(d);
+    
   });
 
 
   //===============================
   //  3.  Create the Scatter Plot
   //===============================
-
-    // // *** Define Scale ***
-    // var xScale = d3.scaleLinear()
-    //   .domain([8, 24])
-    //   .range([0, chartWidth]);
-
-    // var yScale = d3.scaleLinear()
-    //   .domain([4, 26])
-    //   .range([chartHeight, 0]);
-
+    
   //--------------------
   //  Setup Scale
   //--------------------
 
   var xLinearScale = xScale(csvData, chosenXAxis);
-  var yLinearScale = yScale(csvData, chosenYAxis);
-  
-    // // *** Create Axes ***
-    // var xAxis = d3.axisBottom(xScale); // the ticks oriented on the bottom
-    // var yAxis = d3.axisLeft(yScale); // the ticks oriented on the left
+  var yLinearScale = yScale(csvData, chosenYAxis);    
 
   //---------------------
   //  Setup Initial Axes
@@ -334,9 +319,9 @@ d3.csv("assets/data/data.csv").then((csvData) => {
   var circlesGroup = updateToolTip(chosenXAxis, circlesGroup, chosenYAxis);
 
 
-  //===================================
-  //  Create Axes Labels event Listener
-  //===================================  
+  //=======================================
+  //  6. Create Axes Labels event Listener
+  //=======================================  
    
   // X-axis event listener
   xLabelGroup.selectAll("text")
@@ -398,7 +383,7 @@ d3.csv("assets/data/data.csv").then((csvData) => {
             .classed("inactive", true);          
         }
       }
-    }); // close .on()
+    });
 
   // Y-axis event listener
   yLabelGroup.selectAll("text")
@@ -460,10 +445,6 @@ d3.csv("assets/data/data.csv").then((csvData) => {
           .classed("inactive", true);          
       }
     }
-  }); // close .on()
+  }); 
 
-  
-
-
-
-}); // close d3
+}); 
