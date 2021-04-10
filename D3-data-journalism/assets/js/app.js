@@ -94,19 +94,11 @@ function renderYAxes(newYScale, yAxis) {
 //-------------------------------------
 
 // function used for updating circles group with a transition to new circles  
-function renderXCircles(circlesGroup, newXScale, chosenXAxis) { 
+function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
 
   circlesGroup.transition()
               .duration(1000)
-              .attr("cx", d => newXScale(d[chosenXAxis]));                
-
-  return circlesGroup;
-}  
-  
-function renderYCircles(circlesGroup, newYScale, chosenYAxis) {
-
-  circlesGroup.transition()
-              .duration(1000)              
+              .attr("cx", d => newXScale(d[chosenXAxis]))
               .attr("cy", d => newYScale(d[chosenYAxis]));
 
   return circlesGroup;
@@ -311,9 +303,7 @@ d3.csv("assets/data/data.csv").then((csvData) => {
       if (value !== chosenXAxis) {
 
         // replaces chosenXAxis with value
-        chosenXAxis = value;
-
-        //console.log(chosenXAxis)
+        chosenXAxis = value;        
          
         // updates x scale for new data
         xLinearScale = xScale(csvData, chosenXAxis);
@@ -322,7 +312,7 @@ d3.csv("assets/data/data.csv").then((csvData) => {
         xAxis = renderXAxes(xLinearScale, xAxis);
 
         // updates circles with new x values
-        circlesGroup = renderXCircles(circlesGroup, xLinearScale, chosenXAxis);
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
         
         // update state abbreviation text with new x and y values
         stateText = renderStateText(stateText, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
@@ -381,7 +371,7 @@ d3.csv("assets/data/data.csv").then((csvData) => {
       yAxis = renderYAxes(yLinearScale, yAxis);
 
       // updates circles with new y values
-      circlesGroup = renderYCircles(circlesGroup, yLinearScale, chosenYAxis); 
+      circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
       
       // update state abbreviation text with new x and y values
       stateText = renderStateText(stateText, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
