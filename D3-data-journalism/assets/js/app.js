@@ -112,6 +112,21 @@ function renderYCircles(circlesGroup, newYScale, chosenYAxis) {
   return circlesGroup;
 }
 
+//------------------------------------
+// *** Function to Update Text ***
+//------------------------------------
+
+// function used for updating state abbreviations
+function renderStateText(stateText, newXScale, chosenXAxis, newYScale, chosenYAxis) {
+
+  stateText.transition()
+            .duration(1000)
+            .attr("x", d => newXScale(d[chosenXAxis]))
+            .attr("y", d => newYScale(d[chosenYAxis]));
+
+  return stateText;
+}
+
 
 //===============================
 //  2.  Read the data
@@ -257,16 +272,16 @@ d3.csv("assets/data/data.csv").then((csvData) => {
   //  4.  Include state abbreviations in the circles
   //=================================================
 
-  // chartGroup.selectAll(".stateText")
-  //           .data(csvData)
-  //           .enter()
-  //           .append("text")
-  //           .classed("stateText", true)            
-  //           .attr("x", d => xScale(d.poverty))
-  //           .attr("y", d => yScale(d.healthcare))
-  //           .text(d => (d.abbr))
-  //           .attr("dy", "0.25rem")
-  //           .attr("font-size", "10px");
+  var stateText = chartGroup.selectAll(".stateText")
+             .data(csvData)
+            .enter()
+            .append("text")
+            .classed("stateText", true)            
+            .attr("x", d => xLinearScale(d[chosenXAxis]))
+            .attr("y", d => yLinearScale(d[chosenYAxis]))
+            .text(d => d.abbr)
+            .attr("dy", "0.25rem")
+            .attr("font-size", "10px");
 
   
   //===============================
@@ -298,7 +313,7 @@ d3.csv("assets/data/data.csv").then((csvData) => {
         // replaces chosenXAxis with value
         chosenXAxis = value;
 
-        console.log(chosenXAxis)
+        //console.log(chosenXAxis)
          
         // updates x scale for new data
         xLinearScale = xScale(csvData, chosenXAxis);
@@ -307,7 +322,10 @@ d3.csv("assets/data/data.csv").then((csvData) => {
         xAxis = renderXAxes(xLinearScale, xAxis);
 
         // updates circles with new x values
-        circlesGroup = renderXCircles(circlesGroup, xLinearScale, chosenXAxis);                
+        circlesGroup = renderXCircles(circlesGroup, xLinearScale, chosenXAxis);
+        
+        // update state abbreviation text with new x and y values
+        stateText = renderStateText(stateText, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
         // changes classes to change bold text - X-axis
         if (chosenXAxis === "age") {            
@@ -363,7 +381,10 @@ d3.csv("assets/data/data.csv").then((csvData) => {
       yAxis = renderYAxes(yLinearScale, yAxis);
 
       // updates circles with new y values
-      circlesGroup = renderYCircles(circlesGroup, yLinearScale, chosenYAxis);       
+      circlesGroup = renderYCircles(circlesGroup, yLinearScale, chosenYAxis); 
+      
+      // update state abbreviation text with new x and y values
+      stateText = renderStateText(stateText, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
       
       // changes classes to change bold text - Y-axis
       if (chosenYAxis === "smokes") {          
